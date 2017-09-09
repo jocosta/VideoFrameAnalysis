@@ -40,7 +40,7 @@ namespace LiveCameraForm
             emojis.Add(emocao, emoji);
             //}
 
-            emoji.Location = new System.Drawing.Point((int)face.X + 250, (int)face.Y);
+            emoji.Location = new System.Drawing.Point((int)face.X, (int)face.Y);
 
 
 
