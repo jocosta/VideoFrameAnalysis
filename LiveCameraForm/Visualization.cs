@@ -50,12 +50,9 @@ namespace LiveCameraForm
 {
     public class Visualization
     {
-
-
         private static SolidColorBrush s_lineBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 56, G = 101, B = 250, A = 255 });
         private static Typeface s_typeface = new Typeface(new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.Bold, FontStretches.Normal);
-        private static DisplayEmotion _displayEmotion = new DisplayEmotion();
-
+        
         private static BitmapSource DrawOverlay(BitmapSource baseImage, Action<DrawingContext, double> drawAction)
         {
             double annotationScale = baseImage.PixelHeight / 320;
@@ -130,6 +127,11 @@ namespace LiveCameraForm
                     Rect faceRect = new Rect(
                         face.FaceRectangle.Left, face.FaceRectangle.Top,
                         face.FaceRectangle.Width, face.FaceRectangle.Height);
+
+                    Rect emojiRect = new Rect(
+                        face.FaceRectangle.Left, face.FaceRectangle.Top,
+                        face.FaceRectangle.Width, face.FaceRectangle.Height);
+
                     string text = "";
 
                     if (face.FaceAttributes != null)
@@ -156,11 +158,7 @@ namespace LiveCameraForm
                         new Pen(s_lineBrush, lineThickness),
                         faceRect);
 
-                    //ImageSource imgs = GetimageSourceForImageControl(EmotionFace.neutro);
-                    //var Rectang = imgs.
-                    //
-                    //drawingContext.DrawImage(GetimageSourceForImageControl(EmotionFace.neutro),)
-
+                    ClearEmojis(form);
                     if (text != "")
                     {
 
@@ -182,8 +180,9 @@ namespace LiveCameraForm
                         drawingContext.DrawRectangle(s_lineBrush, null, rect);
                         drawingContext.DrawText(ft, origin);
 
-                        _displayEmotion.ShowEmoji(form, faceRect.Top * 2, faceRect.Left * 2, text);
-
+                        var displayEmoji = new DisplayEmotion();
+                        displayEmoji.ShowEmoji(form, emojiRect, text);
+                        
                     }
                 }
             };
@@ -224,6 +223,21 @@ namespace LiveCameraForm
 
             }
 
+        }
+
+        public static void ClearEmojis(Control form)
+        {
+            for (int i = 0; i < form.Controls.Count; i++)
+            {
+                if (form.Controls[i].GetType() == typeof(PictureBox))
+                {
+                    PictureBox obj = (PictureBox)form.Controls[i];
+                    if (obj.Width == 74 && obj.Height == 74)
+                    {
+                        form.Controls.Remove(obj);
+                    }
+                }
+            }
         }
 
     }

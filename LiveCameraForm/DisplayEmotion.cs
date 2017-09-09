@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using WinFormAnimation;
 
@@ -19,21 +20,28 @@ namespace LiveCameraForm
         };
 
         Dictionary<string, PictureBox> emojis = new Dictionary<string, PictureBox>();
-        public async Task ShowEmoji(Control control, double x, double y, string emocao)
-        {
-            PictureBox emoji = null;
-            if (!emojis.TryGetValue(emocao, out emoji))
-            {
-                emoji = new PictureBox();
-                emoji.Top = (int)x;
-                emoji.Left = (int)y;
-                emoji.BackgroundImageLayout = ImageLayout.Stretch;
-                emoji.BackColor = Color.Transparent;
-                emoji.Height = 74;
-                emoji.Width = 74;
 
-                emojis.Add(emocao, emoji);
-            }
+
+
+        public async Task ShowEmoji(Control control, Rect face, string emocao)
+        {
+            //PictureBox emoji = null;
+            // if (!emojis.TryGetValue(emocao, out emoji))
+            //{
+            var emoji = new PictureBox();
+            emoji.Top = (int)(face.Top);
+            emoji.Left = (int)(face.Left + face.Right + 10);
+
+            emoji.BackgroundImageLayout = ImageLayout.Stretch;
+            emoji.BackColor = Color.Transparent;
+            emoji.Height = 74;
+            emoji.Width = 74;
+
+            emojis.Add(emocao, emoji);
+            //}
+
+            emoji.Location = new System.Drawing.Point((int)face.X + 250, (int)face.Y);
+
 
 
             switch (emocao.ToLower())
@@ -67,17 +75,17 @@ namespace LiveCameraForm
                     break;
             }
 
+            Task.Run(() => ExecuteSecure(control, () => control.Controls.Add(emoji)));
+            //Task.Run(() =>
+            //{
+            //    ExecuteSecure(control, () => control.Controls.Add(emoji));
 
-            Task.Factory.StartNew(() =>
-            {
-                ExecuteSecure(control, () => control.Controls.Add(emoji));
-
-                new Animator2D(
-                                  new Path2D(new Float2D(CreateStep(emoji.Top, emoji.Top + 20), CreateStep(emoji.Top + 20, emoji.Top + 40)), new Float2D(CreateStep(emoji.Top + 20, emoji.Top + 40), CreateStep(emoji.Top + 20, emoji.Top + 40)), 300)
-                                      .ContinueTo(new Float2D(CreateStep(emoji.Top, emoji.Top + 20), CreateStep(100, 150)), 300)
-                                      .ContinueTo(new Float2D(CreateStep(emoji.Top, emoji.Top + 20), CreateStep(100, 150)), 300))
-                                      .Play(emoji, Animator2D.KnownProperties.Location, new SafeInvoker(() => { ExecuteSecure(control, () => control.Controls.Remove(emoji)); }));
-            });
+            //    new Animator2D(
+            //                      new Path2D(new Float2D(CreateStep(emoji.Top, emoji.Top + 20), CreateStep(emoji.Top + 20, emoji.Top + 40)), new Float2D(CreateStep(emoji.Top + 20, emoji.Top + 40), CreateStep(emoji.Top + 20, emoji.Top + 40)), 300)
+            //                          .ContinueTo(new Float2D(CreateStep(emoji.Top, emoji.Top + 20), CreateStep(100, 150)), 300)
+            //                          .ContinueTo(new Float2D(CreateStep(emoji.Top, emoji.Top + 20), CreateStep(100, 150)), 300))
+            //                          .Play(emoji, Animator2D.KnownProperties.Location, new SafeInvoker(() => { ExecuteSecure(control, () => control.Controls.Remove(emoji)); }));
+            //});
         }
 
         private void ExecuteSecure(Control form, Action a)

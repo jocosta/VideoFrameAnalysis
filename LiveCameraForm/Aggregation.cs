@@ -47,19 +47,24 @@ namespace LiveCameraForm
     {
         public static Tuple<string, float> GetDominantEmotion(Microsoft.ProjectOxford.Common.Contract.EmotionScores scores)
         {
-            var Item = scores.ToRankedList().Select(kv => new Tuple<string, float>(kv.Key, kv.Value)).FirstOrDefault();
+            var Item = scores.ToRankedList().OrderByDescending(o => o.Value).Select(kv => new Tuple<string, float>(kv.Key, kv.Value)).FirstOrDefault();
             if (Item != null && Item.Item1 == "Neutral")
             {
-                var nonWinner = scores.ToRankedList().Where(i => i.Value > 0.01).OrderBy(o => o.Value).Select(kv => new Tuple<string, float>(kv.Key, kv.Value)).FirstOrDefault();
-
-                if (nonWinner != null)
+                var score2 = scores.ToRankedList().OrderByDescending(o => o.Value).Take(2).Select(kv => new Tuple<string, float>(kv.Key, kv.Value)).ToList();
+                if (score2 != null )
                 {
-                    return scores.ToRankedList().Where(i => i.Value > 0.01).OrderBy(o => o.Value).Select(kv => new Tuple<string, float>(kv.Key, kv.Value)).First();
+                    var nonWinner = score2.OrderBy(o => o.Item2).FirstOrDefault();
+                    var Winner = score2.OrderByDescending(o => o.Item2).FirstOrDefault();
+                    
+                    if (Winner.Item2 - nonWinner.Item2 < 0.9 && Winner.Item2 < 0.7)
+                    {
+                        return nonWinner;
+                    }
                 }
             }
 
-            
-           return scores.ToRankedList().Select(kv => new Tuple<string, float>(kv.Key, kv.Value)).First();
+
+            return scores.ToRankedList().OrderByDescending(o => o.Value).Select(kv => new Tuple<string, float>(kv.Key, kv.Value)).First();
         }
 
         public static string SummarizeEmotion(Microsoft.ProjectOxford.Common.Contract.EmotionScores scores)

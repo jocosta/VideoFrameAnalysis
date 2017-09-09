@@ -1,26 +1,28 @@
-﻿using Microsoft.ProjectOxford.Emotion;
-using Microsoft.ProjectOxford.Emotion.Contract;
-using Microsoft.ProjectOxford.Face;
-using Microsoft.ProjectOxford.Face.Contract;
-using Microsoft.ProjectOxford.Vision;
-using Newtonsoft.Json;
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.ComponentModel;
 using System.Drawing;
+using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VideoFrameAnalyzer;
-using System.Configuration;
 using System.Windows.Media.Imaging;
+using Microsoft.ProjectOxford.Face.Contract;
+using System.Configuration;
+using OpenCvSharp;
+using Microsoft.ProjectOxford.Vision;
+using Microsoft.ProjectOxford.Emotion;
+using Microsoft.ProjectOxford.Face;
+using OpenCvSharp.Extensions;
+using Microsoft.ProjectOxford.Common.Contract;
+using Newtonsoft.Json;
 using System.IO;
 
 namespace LiveCameraForm
 {
-    public partial class Form1 : Form
+    public partial class UcCameraEmotion : UserControl
     {
         private EmotionServiceClient _emotionClient = null;
         private FaceServiceClient _faceClient = null;
@@ -33,7 +35,7 @@ namespace LiveCameraForm
         private bool _fuseClientRemoteResults;
         private LiveCameraResult _latestResultsToDisplay = null;
         private DateTime _startTime;
-        
+
         public TimeSpan AnalysisInterval
         {
             get
@@ -42,18 +44,20 @@ namespace LiveCameraForm
             }
         }
 
-
-        public Form1()
+        public UcCameraEmotion()
         {
+
             InitializeComponent();
 
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+
+
+            BackColor = Color.Black;
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();
 
             _grabber.NewFrameProvided += (s, e) =>
             {
-                
+
 
                 var rects = _localFaceDetector.DetectMultiScale(e.Frame.Image);
                 // Attach faces to frame. 
@@ -79,7 +83,7 @@ namespace LiveCameraForm
             {
                 this.Invoke((Action)delegate
                 {
-                    Visualization.ClearEmojis(imageDrawing); 
+                    Visualization.ClearEmojis(imageDrawing);
                     if (e.TimedOut)
                     {
                         //System.Windows.MessageBox.Show("API call timed out.");
@@ -124,21 +128,15 @@ namespace LiveCameraForm
             };
 
             _localFaceDetector.Load("Data/haarcascade_frontalface_alt2.xml");
-           
         }
-        
-        private void Form1_Load(object sender, EventArgs e)
+
+        private void UcCameraEmotion_Load(object sender, EventArgs e)
         {
             CameraListLoad();
-            
-            StartCamera();
-            //imageBase.Visible = true;
-            //imageDrawing.Visible = false;
 
-            btnEmotion.Visible = false;
-            btnFace.Visible = false;
-            btnNenhum.Visible = false;
+            StartCamera();
         }
+
 
         /// <summary> Function which submits a frame to the Face API. </summary>
         /// <param name="frame"> The video frame to submit. </param>
@@ -152,7 +150,7 @@ namespace LiveCameraForm
             var attrs = new List<FaceAttributeType> { FaceAttributeType.Age,
                 FaceAttributeType.Gender, FaceAttributeType.HeadPose };
             var faces = await _faceClient.DetectAsync(jpg, returnFaceAttributes: attrs);
-            
+
             return new LiveCameraResult { Faces = faces };
         }
 
@@ -215,7 +213,7 @@ namespace LiveCameraForm
             var jpg = frame.Image.ToMemoryStream(".jpg", s_jpegParams);
             // Submit image to API. 
             var result = await _visionClient.AnalyzeImageInDomainAsync(jpg, "celebrities");
- 
+
             // Output. 
             var celebs = JsonConvert.DeserializeObject<CelebritiesResult>(result.Result.ToString()).Celebrities;
             return new LiveCameraResult
@@ -295,11 +293,6 @@ namespace LiveCameraForm
             }
         }
 
-        private void btnEmotion_Click(object sender, EventArgs e)
-        {
-            EmotionCamera();
-        }
-        
         private async void StartCamera()
         {
             if (!(CameraList.Items.Count > 0))
@@ -343,7 +336,7 @@ namespace LiveCameraForm
             _fuseClientRemoteResults = true;
             imageDrawing.Visible = true;
             imageBase.Visible = false;
-           
+
             StartCamera();
         }
 
@@ -354,7 +347,7 @@ namespace LiveCameraForm
             _emotionClient = new EmotionServiceClient(ConfigurationManager.AppSettings["EmotionAPIKey"], ConfigurationManager.AppSettings["EmotionAPIHost"]);
             _visionClient = new VisionServiceClient(ConfigurationManager.AppSettings["VisionAPIKey"], ConfigurationManager.AppSettings["VisionAPIHost"]);
 
-           
+
             //Emotion
             _grabber.AnalysisFunction = FacesAnalysisFunction;
             _fuseClientRemoteResults = true;
@@ -376,16 +369,6 @@ namespace LiveCameraForm
             CameraList.SelectedIndex = 0;
         }
 
-        private void btnNenhum_Click(object sender, EventArgs e)
-        {
-            //Nenhum
-            _fuseClientRemoteResults = false;
-            imageBase.Visible = true;
-            imageDrawing.Visible = false;
-            
-            StartCamera();
-        }
-        
         private System.Drawing.Bitmap BitmapFromSource(BitmapSource bitmapsource)
         {
             System.Drawing.Bitmap bitmap;
@@ -418,15 +401,13 @@ namespace LiveCameraForm
                     MatchAndReplaceFaceRectangles(result.Faces, clientFaces);
                 }
 
-                visImage = Visualization.DrawFaces(visImage, result.Faces, result.EmotionScores, result.CelebrityNames,imageDrawing);
+                visImage = Visualization.DrawFaces(visImage, result.Faces, result.EmotionScores, result.CelebrityNames, imageDrawing);
                 visImage = Visualization.DrawTags(visImage, result.Tags);
             }
             return BitmapFromSource(visImage);
         }
 
-        private void btnFace_Click(object sender, EventArgs e)
-        {
-            FaceCamera();
-        }
+
+
     }
 }

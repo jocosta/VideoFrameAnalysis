@@ -94,3 +94,5 @@ C:\Users\Jefferson\Documents\Visual Studio 2017\Projects\VideoFrameAnalysis\Live
 C:\Users\Jefferson\Documents\Visual Studio 2017\Projects\VideoFrameAnalysis\LiveCameraForm\obj\Debug\LiveCameraForm.csproj.GenerateResource.Cache
 C:\Users\Jefferson\Documents\Visual Studio 2017\Projects\VideoFrameAnalysis\LiveCameraForm\obj\Debug\LiveCameraForm.exe
 C:\Users\Jefferson\Documents\Visual Studio 2017\Projects\VideoFrameAnalysis\LiveCameraForm\obj\Debug\LiveCameraForm.pdb
+C:\Users\Jefferson\Documents\Visual Studio 2017\Projects\VideoFrameAnalysis\LiveCameraForm\obj\Debug\LiveCameraForm.UcCameraEmotion.resources
+C:\Users\Jefferson\Documents\Visual Studio 2017\Projects\VideoFrameAnalysis\LiveCameraForm\obj\Debug\LiveCameraForm.FrmMain.resources

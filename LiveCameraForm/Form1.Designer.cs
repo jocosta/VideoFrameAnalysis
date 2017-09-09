@@ -42,8 +42,9 @@
             // 
             this.imageBase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageBase.Location = new System.Drawing.Point(0, 0);
+            this.imageBase.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.imageBase.Name = "imageBase";
-            this.imageBase.Size = new System.Drawing.Size(779, 442);
+            this.imageBase.Size = new System.Drawing.Size(1039, 544);
             this.imageBase.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageBase.TabIndex = 0;
             this.imageBase.TabStop = false;
@@ -53,8 +54,9 @@
             // 
             this.imageDrawing.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageDrawing.Location = new System.Drawing.Point(0, 0);
+            this.imageDrawing.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.imageDrawing.Name = "imageDrawing";
-            this.imageDrawing.Size = new System.Drawing.Size(779, 442);
+            this.imageDrawing.Size = new System.Drawing.Size(1039, 544);
             this.imageDrawing.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageDrawing.TabIndex = 1;
             this.imageDrawing.TabStop = false;
@@ -63,9 +65,10 @@
             // 
             this.btnEmotion.BackColor = System.Drawing.Color.Transparent;
             this.btnEmotion.CausesValidation = false;
-            this.btnEmotion.Location = new System.Drawing.Point(12, 94);
+            this.btnEmotion.Location = new System.Drawing.Point(16, 116);
+            this.btnEmotion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnEmotion.Name = "btnEmotion";
-            this.btnEmotion.Size = new System.Drawing.Size(63, 49);
+            this.btnEmotion.Size = new System.Drawing.Size(84, 60);
             this.btnEmotion.TabIndex = 2;
             this.btnEmotion.Text = "Emoção";
             this.btnEmotion.UseVisualStyleBackColor = false;
@@ -74,9 +77,10 @@
             // CameraList
             // 
             this.CameraList.FormattingEnabled = true;
-            this.CameraList.Location = new System.Drawing.Point(12, 330);
+            this.CameraList.Location = new System.Drawing.Point(16, 406);
+            this.CameraList.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CameraList.Name = "CameraList";
-            this.CameraList.Size = new System.Drawing.Size(121, 21);
+            this.CameraList.Size = new System.Drawing.Size(160, 24);
             this.CameraList.TabIndex = 3;
             this.CameraList.Visible = false;
             // 
@@ -84,9 +88,10 @@
             // 
             this.btnNenhum.BackColor = System.Drawing.Color.Transparent;
             this.btnNenhum.CausesValidation = false;
-            this.btnNenhum.Location = new System.Drawing.Point(12, 30);
+            this.btnNenhum.Location = new System.Drawing.Point(16, 37);
+            this.btnNenhum.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnNenhum.Name = "btnNenhum";
-            this.btnNenhum.Size = new System.Drawing.Size(63, 44);
+            this.btnNenhum.Size = new System.Drawing.Size(84, 54);
             this.btnNenhum.TabIndex = 4;
             this.btnNenhum.Text = "Nenhum";
             this.btnNenhum.UseVisualStyleBackColor = false;
@@ -96,9 +101,10 @@
             // 
             this.btnFace.BackColor = System.Drawing.Color.Transparent;
             this.btnFace.CausesValidation = false;
-            this.btnFace.Location = new System.Drawing.Point(12, 164);
+            this.btnFace.Location = new System.Drawing.Point(16, 202);
+            this.btnFace.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnFace.Name = "btnFace";
-            this.btnFace.Size = new System.Drawing.Size(63, 48);
+            this.btnFace.Size = new System.Drawing.Size(84, 59);
             this.btnFace.TabIndex = 5;
             this.btnFace.Text = "Face";
             this.btnFace.UseVisualStyleBackColor = false;
@@ -106,9 +112,9 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(779, 442);
+            this.ClientSize = new System.Drawing.Size(1039, 544);
             this.ControlBox = false;
             this.Controls.Add(this.btnFace);
             this.Controls.Add(this.btnNenhum);
@@ -116,7 +122,9 @@
             this.Controls.Add(this.btnEmotion);
             this.Controls.Add(this.imageDrawing);
             this.Controls.Add(this.imageBase);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
