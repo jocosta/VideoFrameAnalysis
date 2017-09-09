@@ -1,0 +1,7 @@
+CtxVideoFrameAnalysis/*/obj/
+
+CtxVideoFrameAnalysis/*/bin/
+
+packages/
+
+.vs/
