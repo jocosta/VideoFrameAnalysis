@@ -19,9 +19,6 @@ namespace LiveCameraForm
         };
 
         Dictionary<string, PictureBox> emojis = new Dictionary<string, PictureBox>();
-
-
-
         public async Task ShowEmoji(Control control, double x, double y, string emocao)
         {
             PictureBox emoji = null;
@@ -37,7 +34,6 @@ namespace LiveCameraForm
 
                 emojis.Add(emocao, emoji);
             }
-
 
 
             switch (emocao.ToLower())
@@ -72,7 +68,7 @@ namespace LiveCameraForm
             }
 
 
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
                 ExecuteSecure(control, () => control.Controls.Add(emoji));
 

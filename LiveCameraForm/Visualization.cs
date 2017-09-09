@@ -50,9 +50,12 @@ namespace LiveCameraForm
 {
     public class Visualization
     {
+
+
         private static SolidColorBrush s_lineBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 56, G = 101, B = 250, A = 255 });
         private static Typeface s_typeface = new Typeface(new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.Bold, FontStretches.Normal);
-        
+        private static DisplayEmotion _displayEmotion = new DisplayEmotion();
+
         private static BitmapSource DrawOverlay(BitmapSource baseImage, Action<DrawingContext, double> drawAction)
         {
             double annotationScale = baseImage.PixelHeight / 320;
@@ -179,9 +182,8 @@ namespace LiveCameraForm
                         drawingContext.DrawRectangle(s_lineBrush, null, rect);
                         drawingContext.DrawText(ft, origin);
 
-                        var displayEmoji = new DisplayEmotion();
-                        displayEmoji.ShowEmoji(form, faceRect.Top*2, faceRect.Left *2, text);
-                        
+                        _displayEmotion.ShowEmoji(form, faceRect.Top * 2, faceRect.Left * 2, text);
+
                     }
                 }
             };
