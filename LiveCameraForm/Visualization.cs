@@ -50,9 +50,13 @@ namespace LiveCameraForm
 {
     public class Visualization
     {
+
+
+
         private static SolidColorBrush s_lineBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 226, G = 236, B = 85, A = 255 });
+        private static SolidColorBrush s_labelBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 245, G = 210, B = 72, A = 255 });
         private static Typeface s_typeface = new Typeface(new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.Bold, FontStretches.Normal);
-        
+
         private static BitmapSource DrawOverlay(BitmapSource baseImage, Action<DrawingContext, double> drawAction)
         {
             double annotationScale = baseImage.PixelHeight / 320;
@@ -128,10 +132,6 @@ namespace LiveCameraForm
                         face.FaceRectangle.Left, face.FaceRectangle.Top,
                         face.FaceRectangle.Width, face.FaceRectangle.Height);
 
-                    Rect emojiRect = new Rect(
-                        face.FaceRectangle.Left, face.FaceRectangle.Top,
-                        face.FaceRectangle.Width, face.FaceRectangle.Height);
-
                     string text = "";
 
                     if (face.FaceAttributes != null)
@@ -158,7 +158,9 @@ namespace LiveCameraForm
                         new Pen(s_lineBrush, lineThickness),
                         faceRect);
 
+
                     ClearEmojis(form);
+
                     if (text != "")
                     {
 
@@ -167,22 +169,47 @@ namespace LiveCameraForm
                             CultureInfo.CurrentCulture, System.Windows.FlowDirection.LeftToRight, s_typeface,
                             16 * annotationScale, Brushes.Black);
 
-                        var pad = 3 * annotationScale;
+                        var pad = 6 * annotationScale;
 
                         var ypad = pad;
-                        var xpad = pad + 4 * annotationScale;
+                        var xpad = pad + 10 * annotationScale;
                         var origin = new System.Windows.Point(
                             faceRect.Left + xpad - lineThickness / 2,
                             faceRect.Top - ft.Height - ypad + lineThickness / 2);
+
                         var rect = ft.BuildHighlightGeometry(origin).GetRenderBounds(null);
                         rect.Inflate(xpad, ypad);
 
                         drawingContext.DrawRectangle(s_lineBrush, null, rect);
+
+
                         drawingContext.DrawText(ft, origin);
 
+                        var x = baseImage.DpiX + faceRect.X;
+                        var y = baseImage.DpiY + faceRect.Y;
+
+
+
+                        Console.WriteLine("------------------");
+                        Console.WriteLine("baseImage width:  " + baseImage.Width);
+                        Console.WriteLine("form width:  " + form.Width);
+                        Console.WriteLine("faceRect width:  " + faceRect.Width);
+                        Console.WriteLine("ft width:  " + ft.Width);
+                        Console.WriteLine("x:  " + x);
+                        Console.WriteLine("y:  " + y);
+                        Console.WriteLine("------------------");
+
+
+                        var originEmoji = new System.Windows.Point(
+                          faceRect.Left + lineThickness,
+                          faceRect.Top - ((ft.Height - ypad + lineThickness / 2) * 8));
+
+                        Rect rectEmoji = new Rect(originEmoji, new Size(90, 90));
+                        drawingContext.DrawRectangle(null, null, rectEmoji);
+
                         var displayEmoji = new DisplayEmotion();
-                        displayEmoji.ShowEmoji(form, emojiRect, text);
-                        
+                        displayEmoji.ShowEmoji(drawingContext, rectEmoji, text);
+
                     }
                 }
             };
